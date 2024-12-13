@@ -1,13 +1,14 @@
 -- +goose Up
-CREATE TABLE email_verification_tokens (
+CREATE TABLE email_verification_codes (
     id SERIAL PRIMARY KEY,
     user_id integer NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    token VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    code VARCHAR(6) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    used BOOLEAN DEFAULT FALSE,
     expires_at TIMESTAMP NOT NULL
 )
 
-CREATE INDEX idx_verification_token ON email_verification_tokens (token);
-
+CREATE INDEX idx_verification_code_email ON email_verification_codes (email, code);
 -- +goose Down
 DROP TABLE IF EXISTS email_verification_tokens;
