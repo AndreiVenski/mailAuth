@@ -1,0 +1,109 @@
+basePath: /v1/auth
+definitions:
+  models.EmailCode:
+    properties:
+      code:
+        type: string
+      email:
+        type: string
+    required:
+    - code
+    - email
+    type: object
+  models.User:
+    properties:
+      email:
+        maxLength: 255
+        type: string
+      name:
+        maxLength: 255
+        type: string
+      nickname:
+        maxLength: 255
+        type: string
+      password:
+        minLength: 6
+        type: string
+      user_id:
+        type: string
+    required:
+    - email
+    - nickname
+    - password
+    type: object
+info:
+  contact:
+    email: venskiandrei32@gmail.com
+    name: Andrei Venski
+    url: https://github.com/andrew967
+  description: This is API for register user and verify email code
+  title: Auth Api
+  version: "1.0"
+paths:
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user and sends a verification email.
+      parameters:
+      - description: User Info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request data
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register a new user
+      tags:
+      - Auth
+  /verify:
+    post:
+      consumes:
+      - application/json
+      description: Verifies the email code and generates tokens.
+      parameters:
+      - description: Email and Code
+        in: body
+        name: emailCode
+        required: true
+        schema:
+          $ref: '#/definitions/models.EmailCode'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tokens
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request data
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Verify email code
+      tags:
+      - Auth
+swagger: "2.0"

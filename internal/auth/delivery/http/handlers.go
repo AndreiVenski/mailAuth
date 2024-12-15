@@ -30,6 +30,17 @@ func respondWithError(ctx *fiber.Ctx, code int, message string) error {
 	})
 }
 
+// Register registers a new user.
+// @Summary      Register a new user
+// @Description  Creates a new user and sends a verification email.
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        user  body      models.User  true  "User Info"
+// @Success      200   {object}  map[string]interface{}
+// @Failure      400   {object}  map[string]interface{} "Invalid request data"
+// @Failure      500   {object}  map[string]interface{} "Internal server error"
+// @Router       /register [post]
 func (h *authHandler) Register(ctx *fiber.Ctx) error {
 	userInfo := &models.User{}
 	err := utils.ReadFromRequest(ctx, userInfo)
@@ -51,6 +62,17 @@ func (h *authHandler) Register(ctx *fiber.Ctx) error {
 	return ctx.JSON(fiber.Map{"message": "user created successfully, please verify now your email to get tokens", "user": createdUser})
 }
 
+// VerifyEmailCode verifies the email code.
+// @Summary      Verify email code
+// @Description  Verifies the email code and generates tokens.
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        emailCode  body      models.EmailCode  true  "Email and Code"
+// @Success      200        {object}  map[string]interface{} "Tokens"
+// @Failure      400        {object}  map[string]interface{} "Invalid request data"
+// @Failure      500        {object}  map[string]interface{} "Internal server error"
+// @Router       /verify [post]
 func (h *authHandler) VerifyEmailCode(ctx *fiber.Ctx) error {
 	emailCode := &models.EmailCode{}
 	err := utils.ReadFromRequest(ctx, emailCode)

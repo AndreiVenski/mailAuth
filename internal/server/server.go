@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
+	"gopkg.in/gomail.v2"
 	"mailAuth/config"
 	"mailAuth/pkg/logger"
 	"net"
@@ -14,18 +15,20 @@ import (
 )
 
 type Server struct {
+	dialer *gomail.Dialer
 	db     *sqlx.DB
 	cfg    *config.Config
 	fiber  *fiber.App
 	logger logger.Logger
 }
 
-func NewServer(db *sqlx.DB, cfg *config.Config, fiberApp *fiber.App, logger logger.Logger) *Server {
+func NewServer(db *sqlx.DB, cfg *config.Config, fiberApp *fiber.App, logger logger.Logger, dialer *gomail.Dialer) *Server {
 	return &Server{
 		db:     db,
 		cfg:    cfg,
 		fiber:  fiberApp,
 		logger: logger,
+		dialer: dialer,
 	}
 }
 
