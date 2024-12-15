@@ -7,7 +7,7 @@ CREATE TABLE email_verification_codes (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     used BOOLEAN DEFAULT FALSE,
     expires_at TIMESTAMP NOT NULL
-)
+);
 
 CREATE INDEX idx_verification_code_email ON email_verification_codes (email, code);
 -- +goose Down

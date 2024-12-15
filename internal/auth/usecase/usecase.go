@@ -10,6 +10,7 @@ import (
 	"mailAuth/pkg/httpErrors"
 	logger2 "mailAuth/pkg/logger"
 	"mailAuth/pkg/utils"
+	"time"
 )
 
 type authUC struct {
@@ -41,12 +42,13 @@ func (uc *authUC) RegisterUser(ctx context.Context, user *models.User) (*models.
 	if err != nil {
 		return nil, errors.Wrap(err, "authUC.RegisterUser.HashPassword")
 	}
-
+	user.UserID = uuid.New()
 	createdUser, err := uc.authRepo.CreateUser(ctx, user)
 	if err != nil {
 		return nil, err
 	}
 
+	createdUser.SanitizePassword()
 	emailToken, err := utils.GenerateEmailVerificationCode(uc.cfg, createdUser)
 	if err != nil {
 		return nil, errors.Wrap(err, "authUC.RegisterUser.GenerateEmailVerificationCode")
@@ -72,13 +74,12 @@ func (uc *authUC) VerifyCode(ctx context.Context, emailCode *models.EmailCode) (
 	if userID == uuid.Nil {
 		return nil, httpErrors.NotExistedCodeError
 	}
-
 	tokens, err := utils.GenerateTokens(uc.cfg, userID)
 	if err != nil {
 		return nil, errors.Wrap(err, "authUC.RegisterUser.GenerateTokens")
 	}
 
-	refreshTokenRecord := &models.RefreshToken{RefreshTokenID: tokens.RefreshTokenID, UserID: userID, RefreshToken: tokens.RefreshToken, ClientInfo: "", ExpiresAt: uc.cfg.Server.RefreshTokenExpires}
+	refreshTokenRecord := &models.RefreshToken{RefreshTokenID: tokens.RefreshTokenID, UserID: userID, RefreshToken: tokens.RefreshToken, ClientInfo: " ", ExpiresAt: time.Now().Add(uc.cfg.Server.RefreshTokenExpires)}
 	if err = uc.authRepo.CreateRefreshToken(ctx, refreshTokenRecord); err != nil {
 		return nil, err
 	}

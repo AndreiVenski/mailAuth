@@ -6,10 +6,10 @@ import (
 )
 
 type EmailVerificationCode struct {
-	UserID    uuid.UUID     `json:"user_id" db:"user_id"`
-	Email     string        `json:"email" db:"email"`
-	Code      string        `json:"code" db:"code"`
-	ExpiresAt time.Duration `json:"expires_at" db:"expire_at"`
+	UserID    uuid.UUID `json:"user_id" db:"user_id"`
+	Email     string    `json:"email" db:"email"`
+	Code      string    `json:"code" db:"code"`
+	ExpiresAt time.Time `json:"expires_at" db:"expire_at"`
 }
 
 type EmailCode struct {

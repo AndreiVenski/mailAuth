@@ -7,7 +7,7 @@ import (
 )
 
 func NewSMTPDialer(cfg *config.Config) (*gomail.Dialer, error) {
-	dialer := gomail.NewDialer(cfg.SMTPServer.Host, cfg.SMTPServer.Port, cfg.SMTPServer.Email, cfg.SMTPServer.Password)
+	dialer := gomail.NewDialer(cfg.SMTPServer.Host, cfg.SMTPServer.Port, cfg.SMTPServer.Username, cfg.SMTPServer.Password)
 
 	err := PingSMTP(dialer)
 	if err != nil {

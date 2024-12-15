@@ -10,26 +10,16 @@ definitions:
     - code
     - email
     type: object
-  models.User:
+  models.UserSwagger:
     properties:
       email:
-        maxLength: 255
         type: string
       name:
-        maxLength: 255
         type: string
       nickname:
-        maxLength: 255
         type: string
       password:
-        minLength: 6
         type: string
-      user_id:
-        type: string
-    required:
-    - email
-    - nickname
-    - password
     type: object
 info:
   contact:
@@ -51,7 +41,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/models.UserSwagger'
       produces:
       - application/json
       responses:

@@ -36,7 +36,7 @@ func respondWithError(ctx *fiber.Ctx, code int, message string) error {
 // @Tags         Auth
 // @Accept       json
 // @Produce      json
-// @Param        user  body      models.User  true  "User Info"
+// @Param        user  body      models.UserSwagger  true  "User Info"
 // @Success      200   {object}  map[string]interface{}
 // @Failure      400   {object}  map[string]interface{} "Invalid request data"
 // @Failure      500   {object}  map[string]interface{} "Internal server error"
@@ -45,17 +45,17 @@ func (h *authHandler) Register(ctx *fiber.Ctx) error {
 	userInfo := &models.User{}
 	err := utils.ReadFromRequest(ctx, userInfo)
 	if err != nil {
-		h.logger.Fatalf("Register: Error with request data: %v", err)
+		h.logger.Errorf("Register: Error with request data: %v", err)
 		return respondWithError(ctx, 400, httpErrors.InvalidRequestDataError.Error())
 	}
 
 	createdUser, err := h.authUC.RegisterUser(ctx.UserContext(), userInfo)
 	if err != nil {
 		if httpErrors.IsUserError(err) {
-			h.logger.Fatalf("RegisterUser users error: %v", err.Error())
+			h.logger.Errorf("RegisterUser users error: %v", err.Error())
 			return respondWithError(ctx, 400, err.Error())
 		}
-		h.logger.Fatalf("RegisterUser server error: %v", err.Error())
+		h.logger.Errorf("RegisterUser server error: %v", err.Error())
 		return respondWithError(ctx, 500, "Can't register user.")
 	}
 
@@ -77,17 +77,17 @@ func (h *authHandler) VerifyEmailCode(ctx *fiber.Ctx) error {
 	emailCode := &models.EmailCode{}
 	err := utils.ReadFromRequest(ctx, emailCode)
 	if err != nil {
-		h.logger.Fatalf("VerifyEmailCode: Error with request data: %v", err)
+		h.logger.Errorf("VerifyEmailCode: Error with request data: %v", err)
 		return respondWithError(ctx, 400, httpErrors.InvalidRequestDataError.Error())
 	}
 
 	tokens, err := h.authUC.VerifyCode(ctx.UserContext(), emailCode)
 	if err != nil {
 		if httpErrors.IsUserError(err) {
-			h.logger.Fatalf("VerifyEmailCode users error: %v", err.Error())
+			h.logger.Errorf("VerifyEmailCode users error: %v", err.Error())
 			return respondWithError(ctx, 400, err.Error())
 		}
-		h.logger.Fatalf("VerifyEmailCode server error: %v", err.Error())
+		h.logger.Errorf("VerifyEmailCode server error: %v", err.Error())
 		return respondWithError(ctx, 500, "Can't verify email code.")
 	}
 

@@ -1,13 +1,13 @@
 -- +goose Up
 CREATE TABLE users (
-    id UUID PRIMARY KEY ,
+    id UUID PRIMARY KEY,
     name VARCHAR(255),
     nickname VARCHAR(255) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL   UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     email_verified BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE UNIQUE INDEX idx_users_email ON users (email);
 CREATE UNIQUE INDEX idx_users_nickname ON users (nickname);

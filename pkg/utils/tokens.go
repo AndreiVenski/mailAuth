@@ -2,6 +2,7 @@ package utils
 
 import (
 	"crypto/rand"
+	"encoding/base64"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"mailAuth/config"
@@ -41,7 +42,7 @@ func GenerateRefreshToken() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return string(tokenBytes), nil
+	return base64.StdEncoding.EncodeToString(tokenBytes), nil
 }
 
 func GenerateAccessToken(cfg *config.Config, userID, refreshTokenID uuid.UUID) (string, error) {

@@ -2,7 +2,7 @@ package repository
 
 const (
 	ifExistsUserQuery = `SELECT EXISTS (SELECT 1 FROM users WHERE nickname=$1 OR email=$2)`
-	createUserQuery   = `INSERT INTO users (id, name, nickname, email, password_hash) VALUES ($1, $2, $3, $4, $5) RETURNING (id, name, nickname, email)`
+	createUserQuery   = `INSERT INTO users (id, name, nickname, email, password_hash) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, nickname, email, password_hash`
 
 	addEmailCode = `INSERT INTO email_verification_codes (user_id, email, code, expires_at) VALUES ($1, $2, $3, $4)`
 

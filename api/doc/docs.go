@@ -39,7 +39,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.UserSwagger"
                         }
                     }
                 ],
@@ -134,31 +134,19 @@ const docTemplate = `{
                 }
             }
         },
-        "models.User": {
+        "models.UserSwagger": {
             "type": "object",
-            "required": [
-                "email",
-                "nickname",
-                "password"
-            ],
             "properties": {
                 "email": {
-                    "type": "string",
-                    "maxLength": 255
+                    "type": "string"
                 },
                 "name": {
-                    "type": "string",
-                    "maxLength": 255
+                    "type": "string"
                 },
                 "nickname": {
-                    "type": "string",
-                    "maxLength": 255
+                    "type": "string"
                 },
                 "password": {
-                    "type": "string",
-                    "minLength": 6
-                },
-                "user_id": {
                     "type": "string"
                 }
             }

@@ -6,6 +6,7 @@ import (
 	"mailAuth/config"
 	"mailAuth/internal/models"
 	"math/big"
+	"time"
 )
 
 func GenerateEmailVerificationCode(cfg *config.Config, user *models.User) (*models.EmailVerificationCode, error) {
@@ -19,6 +20,6 @@ func GenerateEmailVerificationCode(cfg *config.Config, user *models.User) (*mode
 		UserID:    user.UserID,
 		Email:     user.Email,
 		Code:      code,
-		ExpiresAt: cfg.Server.EmailCodeExpiresAt,
+		ExpiresAt: time.Now().Add(cfg.Server.EmailCodeExpiresAt),
 	}, nil
 }

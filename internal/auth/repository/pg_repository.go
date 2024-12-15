@@ -5,9 +5,11 @@ import (
 	"database/sql"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
+	"github.com/lib/pq"
 	"github.com/pkg/errors"
 	"mailAuth/internal/auth"
 	"mailAuth/internal/models"
+	"mailAuth/pkg/httpErrors"
 )
 
 type authPostgresRepository struct {
@@ -33,6 +35,9 @@ func (r *authPostgresRepository) CreateUser(ctx context.Context, user *models.Us
 	createdUser := &models.User{}
 	err := r.db.QueryRowxContext(ctx, createUserQuery, user.UserID, user.Name, user.NickName, user.Email, user.Password).StructScan(createdUser)
 	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
+			return nil, httpErrors.ExistedUserError
+		}
 		return nil, errors.Wrap(err, "authPostgresRepository.CreateUser.StructScan")
 	}
 	return createdUser, nil
@@ -48,6 +53,7 @@ func (r *authPostgresRepository) AddEmailCode(ctx context.Context, code *models.
 
 func (r *authPostgresRepository) FindEmailCodeID(ctx context.Context, email, code string) (uuid.UUID, error) {
 	var userID uuid.UUID
+
 	err := r.db.QueryRowxContext(ctx, getIDAndUpdateUsedofEmailCode, email, code).Scan(&userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
