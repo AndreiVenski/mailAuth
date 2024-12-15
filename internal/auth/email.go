@@ -1,3 +1,5 @@
 package auth
 
-type Email interface{}
+type Email interface {
+	SendMail(toEmail string, code string) error
+}

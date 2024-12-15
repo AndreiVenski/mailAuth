@@ -11,7 +11,5 @@ CREATE TABLE users (
 
 CREATE UNIQUE INDEX idx_users_email ON users (email);
 CREATE UNIQUE INDEX idx_users_nickname ON users (nickname);
-
-
 -- +goose Down
 DROP TABLE IF EXISTS users;

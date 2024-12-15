@@ -7,9 +7,10 @@ import (
 )
 
 type Config struct {
-	Postgres PostgresqlConfig
-	Server   ServerConfig
-	Test     TestConfig
+	Postgres   PostgresqlConfig
+	Server     ServerConfig
+	Test       TestConfig
+	SMTPServer SMTPConfig
 }
 
 type TestConfig struct {
@@ -30,6 +31,14 @@ type ServerConfig struct {
 	JWTSecret           string        `envconfig:"SERVER_JWTSECRET"`
 	AccessTokenExpires  time.Duration `envconfig:"SERVER_ACCESSTOKENEXPIRES"`
 	RefreshTokenExpires time.Duration `envconfig:"SERVER_REFRESHTOKENEXPIRES"`
+	EmailCodeExpiresAt  time.Duration `envconfig:"SERVER_EMAILCODEEXPIRESAT"`
+}
+
+type SMTPConfig struct {
+	Host     string `envconfig:"SMTPSERVER_HOST"`
+	Port     int    `envconfig:"SMTPSERVER_PORT"`
+	Email    string `envconfig:"SMTPSERVER_EMAIL"`
+	Password string `envconfig:"SMTPSERVER_PASSWORD"`
 }
 
 func InitConfig(path string) (*Config, error) {

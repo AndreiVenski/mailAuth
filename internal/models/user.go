@@ -5,8 +5,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type UserWithToken struct{}
-
 type User struct {
 	UserID   uuid.UUID `json:"user_id" db:"id" validate:"omitempty"`
 	Name     string    `json:"name" db:"name" validate:"omitempty,max=255"`
