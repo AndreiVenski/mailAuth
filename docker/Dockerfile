@@ -17,6 +17,7 @@ WORKDIR /app
 
 COPY --from=build /app/authservice /app/authservice
 COPY --from=build /app/migrations /app/migrations
+COPY --from=build /app/scripts /app/scripts
 
 COPY .env /app/.env
 

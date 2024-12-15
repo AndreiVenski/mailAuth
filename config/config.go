@@ -9,7 +9,13 @@ import (
 type Config struct {
 	Postgres   PostgresqlConfig
 	Server     ServerConfig
+	Test       TestConfig
 	SMTPServer SMTPConfig
+}
+
+type TestConfig struct {
+	AddTestDataToDB      bool   `envconfig:"TEST_ADDTESTDATATODB"`
+	TestDataScriptSource string `envconfig:"TEST_TESTDATASCRIPTSOURCE"`
 }
 
 type PostgresqlConfig struct {

@@ -5,6 +5,7 @@ import (
 	"mailAuth/config"
 	server2 "mailAuth/internal/server"
 	"mailAuth/pkg/db/postgres_conn"
+	"mailAuth/pkg/db/test_data_script"
 	logger2 "mailAuth/pkg/logger"
 	"mailAuth/pkg/smtp_conn"
 
@@ -48,6 +49,13 @@ func main() {
 	if err = goose.Up(db.DB, "migrations"); err != nil {
 		logger.Error("Migrations up failed", err)
 		os.Exit(1)
+	}
+
+	if cfg.Test.AddTestDataToDB {
+		if err = test_data_script.ExecuteSQLFile(db.DB, cfg.Test.TestDataScriptSource); err != nil {
+			logger.Error("Test data add failed", err)
+			os.Exit(1)
+		}
 	}
 
 	fiberApp := fiber.New(fiber.Config{
